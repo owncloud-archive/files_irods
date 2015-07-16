@@ -1,17 +1,17 @@
 
 *'''Project''': PHP Prods API for iRODS 
-*'''Date''': 06/04/2013
-*'''Release Version''': 3.3.0-beta1
-*'''git tag''': 3.3.0-beta1
+*'''Date''': 08/14/2013
+*'''Release Version''': 3.3.0
+*'''git tag''':  3.3.0
 
 ==News==
 
 PHP API for iRODS
 
-This alpha is a merge of community supported additions for PAM and tickets
+This release is a merge of community supported additions for PAM and tickets
 
 
-GForge for iDrop-swing is at:  [[https://code.renci.org/gf/project/irodsphp/]]
+GForge for PHP is at:  [[https://code.renci.org/gf/project/irodsphp/]]
 
 ==Requirements==
 

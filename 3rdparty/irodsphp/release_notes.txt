@@ -1,7 +1,7 @@
 *'''Project''': iRODS PHP Library PRODS and PRODS Web Browser
-*'''Date''': 06/04/2013
-*'''Release Version''': 3.3.0-beta1
-*'''git tag''':  3.3.0-beta1
+*'''Date''': 08/14/2013
+*'''Release Version''': 3.3.0
+*'''git tag''':  3.3.0
 
 ==News==
 
@@ -11,4 +11,3 @@ Please go to [[https://code.renci.org/gf/project/irodsphp/] for the latest news 
 
 Note that the git repository is now the canonical version of the PHP code.  The code in the iRODS SVN server is deprecated and will be taken down at the 3.0.0 release point.  There may be other versions in Google Code and other places, but these should be considered obsolete.
 
-Please review release notes in sub projects for details
