@@ -55,8 +55,8 @@ class RODSAccount
     $authtype='irods';
     if (isset($url['user']))
     {
-      if (strstr($url['user'],".")!==false) {
-        $user_array=@explode(".",$url['user']);
+      if (strstr($url['user'],"_")!==false) {
+        $user_array=@explode("_",$url['user']);
         if (count($user_array)===3) {
           $user=$user_array[0];
           $zone=$user_array[1];

@@ -80,9 +80,9 @@ class iRODS extends \OC\Files\Storage\StreamWrapper{
 		}
 
 		// adding auth method
-		$userWithZone = $this->user.'.'.$this->zone;
+		$userWithZone = $this->user.'_'.$this->zone;
 		if ($this->auth_mode !== '') {
-			$userWithZone .= '.'.$this->auth_mode;
+			$userWithZone .= '_'.$this->auth_mode;
 		}
 
 		// url wrapper schema is named rods
