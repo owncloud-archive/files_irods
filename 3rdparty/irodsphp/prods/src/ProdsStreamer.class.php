@@ -39,6 +39,8 @@ class ProdsStreamer
          */
         public $metadata;
 
+        const DEFAULT_RESCNAME = "df.bluefern.canterbury.ac.nz";
+
 	
 	/**
 	 * url_stat() handler.
@@ -331,7 +333,7 @@ class ProdsStreamer
             $mode = substr($mode, 0, strlen($mode) - 1);
          try {
             $this->file = ProdsFile::fromURI($path);
-            $this->file->open($mode);
+            $this->file->open($mode, self::DEFAULT_RESCNAME);
             $this->metadata = $this->file->getMeta();
             return true;
         } catch (Exception $e) {
