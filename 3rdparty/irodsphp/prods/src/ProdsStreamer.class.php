@@ -31,6 +31,13 @@ class ProdsStreamer
 	 * @access private
 	 */
 	private $file;
+	
+	/**
+         * Metadata of the file/directory
+         *
+         * @access public
+         */
+        public $metadata;
 
 	
 	/**
@@ -217,6 +224,7 @@ class ProdsStreamer
 	{
 		try {
 		  $this->dir=ProdsDir::fromURI($path,true);
+		  $this->metadata = $this->dir->getMeta();
 		  return true;
 		} catch (Exception $e) {
 		  trigger_error("Got an exception:$e", E_USER_WARNING);
@@ -324,9 +332,10 @@ class ProdsStreamer
          try {
             $this->file = ProdsFile::fromURI($path);
             $this->file->open($mode);
+            $this->metadata = $this->file->getMeta();
             return true;
         } catch (Exception $e) {
-            trigger_error("Got an exception:$e", E_USER_WARNING);
+            trigger_error("Got an exception:$e while trying to stream_open $path with mode $mode", E_USER_WARNING);
             return false;
         }
     }
