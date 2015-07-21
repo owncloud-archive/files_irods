@@ -958,7 +958,10 @@ class RODSConn {
      */
     public function closeFileDesc($l1desc) {
         try {
-
+            if (!is_resource($this->conn)) {
+              trigger_error($this->conn . " is already closed", E_USER_WARNING);
+              return;
+            }
             $openedDataObjInp = new RP_OpenedDataObjInp($l1desc);
             $msg = new RODSMessage("RODS_API_REQ_T", $openedDataObjInp, $GLOBALS['PRODS_API_NUMS']['OPENED_DATA_OBJ_CLOSE_AN']);
             fwrite($this->conn, $msg->pack()); // send it
@@ -983,7 +986,7 @@ class RODSConn {
     public function fileRead($l1desc, $length) {
        
         $openedDataObjInp = new RP_OpenedDataObjInp($l1desc, $length);
-        $msg = new RODSMessage("RODS_API_REQ_T", $openedDataObjInp, $GLOBALS['PRODS_API_NUMS']['OPENED_DATA_OBJ_READ_AN'], $string);
+        $msg = new RODSMessage("RODS_API_REQ_T", $openedDataObjInp, $GLOBALS['PRODS_API_NUMS']['OPENED_DATA_OBJ_READ_AN']);
 
         fwrite($this->conn, $msg->pack()); // send it
         $msg = new RODSMessage();

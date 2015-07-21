@@ -149,7 +149,7 @@ class ProdsFile extends ProdsPath
 
         $this->conn = RODSConnManager::getConn($this->account);
         $this->l1desc = $this->conn->openFileDesc($this->path_str, $mode,
-            $this->postion, $rescname, $assum_file_exists, $filetype, $cmode);
+            $this->position, $rescname, $assum_file_exists, $filetype, $cmode);
         $this->openmode = $mode;
         RODSConnManager::releaseConn($this->conn);
     }
