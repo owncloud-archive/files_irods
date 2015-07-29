@@ -202,8 +202,12 @@ class ProdsStreamer
                   $file_from=ProdsDir::fromURI($url_from);
                   $file_to=ProdsDir::fromURI($url_to);
                   $conn = RODSConnManager::getConn($file_from->account);
+                  
+                  if (file_exists($url_to)) {
+                    unlink($url_to);
+                  }
 
-                  if (is_dir($url_from)) {
+                  if (is_file($url_from)) {
                     $conn->rename($file_from->path_str, $file_to->path_str, 0);
                   } else {
                     $conn->rename($file_from->path_str, $file_to->path_str, 1);
