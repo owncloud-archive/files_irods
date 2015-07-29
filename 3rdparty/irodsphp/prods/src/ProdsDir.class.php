@@ -93,7 +93,9 @@ class ProdsDir extends ProdsPath
       $path_str=$path_str.'#'.$url['fragment'];
 
     if (empty($path_str))
-      $path_str='/';
+      $path_str = '/';
+    if (substr($path_str, -2) === '/.')
+      $path_str = trim($path_str, '.');
 
     return (new ProdsDir($account,$path_str,$verify));
   }
