@@ -25,3 +25,4 @@ OC_Mount_Config::registerBackend('\OCA\Files_iRODS\iRODS', array(
 		'root' => (string)$l->t('Root'))));
 
 OCP\Util::addScript('files_irods', 'meta');
+OCP\Util::addStyle( 'files_irods', 'meta' );
