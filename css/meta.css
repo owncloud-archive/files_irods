@@ -1,3 +1,8 @@
+#metadata>thead>tr>th {
+  padding: 0px 15px 5px 0px;
+}
 #metadata>tbody>tr>td {
   padding: 0px 15px 5px 0px;
+  cursor: pointer;
+  cursor: hand;
 }

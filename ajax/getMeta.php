@@ -19,7 +19,7 @@ $html = "<table id='metadata'>
            </thead>
            <tbody>";
 foreach ($meta as $m) {
-  $html .= sprintf("<tr><td>%s</td><td>%s</td><td>%s</td></tr>", $m->name, $m->value, $m->units);
+  $html .= sprintf("<tr><td data-name='name' data-pk=$m->id>%s</td><td data-name='value' data-pk=$m->id>%s</td><td data-name='units' data-pk=$m->id>%s</td></tr>", $m->name, $m->value, $m->units);
 }
 $html .= "</tbody></table>";
 

@@ -331,11 +331,34 @@ class ProdsStreamer
      */
     public function stream_open($path, $mode, $options, &$opened_path)
     {
-
         // get rid of tailing 'b', if any.
         if (($mode{strlen($mode) - 1} == 'b') && (strlen($mode) > 1))
             $mode = substr($mode, 0, strlen($mode) - 1);
          try {
+            if ($mode === 'm') {
+              $url = parse_url($path);
+              $args = array();
+              parse_str($url['query'], $args);
+              $new = new RODSMeta($args['name'], $args['value'], $args['units'], $args['id']);
+              unset($url['query']);
+              $path = strstr($path, '?', true);
+              $this->file = ProdsFile::fromURI($path);
+              $oldMeta = $this->file->getMeta();
+              $old = NULL;
+              foreach ($oldMeta as $meta) {
+                if ($meta->id === $new->id) {
+                  $old = $meta;
+                  break;
+                }
+              }
+              if (isset($old)) {
+                $this->file->updateMeta($old, $new);
+              } else {
+                $this->file->addMeta($new);
+              }
+              $this->metadata = $this->file->getMeta();
+              return true;
+            }
             $this->file = ProdsFile::fromURI($path);
             $this->file->open($mode, self::DEFAULT_RESCNAME);
             $this->metadata = $this->file->getMeta();

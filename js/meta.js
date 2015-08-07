@@ -7,6 +7,12 @@ function showModal(filename, context) {
               $('.oc-dialog-content').html(data.data);
               $(".oc-dialog").css("width", "25%");
               $(".oc-dialog").css("left", "40%");
+              $('#metadata>tbody>tr>td').editable({
+                  type: 'text',
+                  url: OC.filePath('files_irods', 'ajax', 'setMeta.php'),
+                  params: {source:filename},
+                  mode: 'inline',
+              });
             });
 }
 
