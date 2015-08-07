@@ -1,6 +1,4 @@
-function showModal(filename, context) {
-  OC.dialogs.info("Loading...", 'Metadata for ' + filename, function() {}, true);
-  var filename = context.dir + '/' + filename;
+function loadContent(filename) {
   $.getJSON(OC.filePath('files_irods', 'ajax', 'getMeta.php'),
             {source:filename},
             function(data, status, xhr) {
@@ -13,7 +11,19 @@ function showModal(filename, context) {
                   params: {source:filename},
                   mode: 'inline',
               });
+              $('.oc-dialog-content').append('<button id="add-metadata" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Add</button>');
+              $('.oc-dialog-content').append('<button id="refresh-metadata" class="btn btn-primary"><i class="glyphicon glyphicon-refresh"></i> Refresh</button>');
+              $("#refresh-metadata").click(function() {
+                $('.oc-dialog-content').html("Loading...");
+                loadContent(filename);
+              });
             });
+}
+
+function showModal(filename, context) {
+  OC.dialogs.info("Loading...", 'Metadata for ' + filename, function() {}, true);
+  var filename = context.dir + '/' + filename;
+  loadContent(filename);
 }
 
 $(document).ready(function() {

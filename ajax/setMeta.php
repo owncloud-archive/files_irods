@@ -6,12 +6,20 @@ OCP\JSON::checkAppEnabled('files_irods');
 
 $source = $_POST['source'];
 
-$result = \OC\Files\Filesystem::fopen("$source?name=${_POST['name']}&value=${_POST['value']}&units=${_POST['units']}&id=${_POST['pk']}", 'm');
+$f = \OC\Files\Filesystem::fopen("$source?name=${_POST['name']}&value=${_POST['value']}&id=${_POST['pk']}", 'm');
+$meta = stream_get_meta_data($f)['wrapper_data']->metadata;
 
-if ($result == false) {
+$newId = 0;
+foreach ($meta as $m) {
+  if ($m->id > $newId) {
+    $newId = $m->id;
+  }
+}
+
+if ($f == false) {
   \OCP\JSON::error();
 } else {
-  \OCP\JSON::success();
+  \OCP\JSON::success(array("newId"=>$newId));
 }
 
 ?>

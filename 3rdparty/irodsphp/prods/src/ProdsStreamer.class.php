@@ -339,21 +339,38 @@ class ProdsStreamer
               $url = parse_url($path);
               $args = array();
               parse_str($url['query'], $args);
-              $new = new RODSMeta($args['name'], $args['value'], $args['units'], $args['id']);
               unset($url['query']);
               $path = strstr($path, '?', true);
               $this->file = ProdsFile::fromURI($path);
-              $oldMeta = $this->file->getMeta();
               $old = NULL;
-              foreach ($oldMeta as $meta) {
-                if ($meta->id === $new->id) {
-                  $old = $meta;
-                  break;
+              if (!empty($args['id'])) {
+                $oldMeta = $this->file->getMeta();
+                foreach ($oldMeta as $meta) {
+                  if ($meta->id === $args['id']) {
+                    $old = $meta;
+                    break;
+                  }
                 }
               }
-              if (isset($old)) {
+              if (!empty($old)) {
+                $new = new RODSMeta($old->name, $old->value, $old->units, $old->id);
+                if ($args['name'] === 'name') {
+                  $new->name = $args['value'];
+                } else if ($args['name'] === 'value') {
+                  $new->value = $args['value'];
+                } else if ($args['name'] === 'units') {
+                  $new->units = $args['value'];
+                }
                 $this->file->updateMeta($old, $new);
               } else {
+                $new = new RODSMeta("name", "value", "units");
+                if ($args['name'] === 'name') {
+                  $new->name = $args['value'];
+                } else if ($args['name'] === 'value') {
+                  $new->value = $args['value'];
+                } else if ($args['name'] == 'units') {
+                  $new->units = $args['units'];
+                }
                 $this->file->addMeta($new);
               }
               $this->metadata = $this->file->getMeta();
