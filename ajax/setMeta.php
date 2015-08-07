@@ -19,7 +19,7 @@ foreach ($meta as $m) {
 if ($f == false) {
   \OCP\JSON::error();
 } else {
-  \OCP\JSON::success(array("newId"=>$newId));
+  \OCP\JSON::success(array("oldId"=>$_POST['pk'], "newId"=>$newId));
 }
 
 ?>

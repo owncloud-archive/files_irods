@@ -10,6 +10,11 @@ function loadContent(filename) {
                   url: OC.filePath('files_irods', 'ajax', 'setMeta.php'),
                   params: {source:filename},
                   mode: 'inline',
+                  success: function (response, newValue) {
+                    if (response.newId && response.oldId) {
+                      $("td[data-pk='" + response.oldId + "']").editable('option', 'pk', response.newId);
+                    }
+                  }
               });
               $('.oc-dialog-content').append('<button id="add-metadata" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Add</button>');
               $('.oc-dialog-content').append('<button id="refresh-metadata" class="btn btn-primary"><i class="glyphicon glyphicon-refresh"></i> Refresh</button>');
