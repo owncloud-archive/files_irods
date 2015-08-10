@@ -1,6 +1,8 @@
-function remove(id) {
+function remove(filename, id) {
   console.log("Delete "+id);
   $("table#metadata>tbody>tr>td.editable[data-pk='"+id+"']").parent().remove();
+  $.post(OC.filePath('files_irods', 'ajax', 'setMeta.php'),
+         {source:filename, delete:true, pk: id});
 }
 
 function loadContent(filename) {
@@ -8,8 +10,8 @@ function loadContent(filename) {
             {source:filename},
             function(data, status, xhr) {
               $('.oc-dialog-content').html(data.data);
-              $(".oc-dialog").css("width", "25%");
-              $(".oc-dialog").css("left", "40%");
+              $(".oc-dialog").css("width", "80%");
+              $(".oc-dialog").css("left", "13%");
               var options = {
                   type: 'text',
                   url: OC.filePath('files_irods', 'ajax', 'setMeta.php'),
@@ -26,10 +28,10 @@ function loadContent(filename) {
               };
               $('table#metadata>tbody>tr>td.editable').editable(options);
               $('table#metadata>tbody>tr>td>button.remove-metadata').click(function() {
-                remove($(this).attr('data-pk'));
+                remove(filename, $(this).attr('data-pk'));
               });
-              $('.oc-dialog-content').append('<button id="add-metadata" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Add</button>');
-              $("#add-metadata").click(function() {
+              $('.oc-dialog-content').append('<button class="add-metadata btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Add</button>');
+              $(".add-metadata").click(function() {
                 var id = Date.now();
                 $("table#metadata>tbody").append("<tr><td class='editable' data-name='name' data-pk='"+id+"'>name</td><td class='editable' data-name='value' data-pk='"+id+"'>value</td><td class='editable' data-name='units' data-pk='"+id+"'>units</td><td><button class='btn btn-danger remove-metadata' data-pk='"+id+"'><i class='glyphicon glyphicon-remove'></i> Remove</button></td></tr>");
                 $("td[data-pk='" + id + "'].editable").editable(options);
@@ -37,8 +39,8 @@ function loadContent(filename) {
                   remove($(this).attr('data-pk'));
                 });
               });
-              $('.oc-dialog-content').append('<button id="refresh-metadata" class="btn btn-primary"><i class="glyphicon glyphicon-refresh"></i> Refresh</button>');
-              $("#refresh-metadata").click(function() {
+              $('.oc-dialog-content').append('<button class="refresh-metadata btn btn-primary"><i class="glyphicon glyphicon-refresh"></i> Refresh</button>');
+              $(".refresh-metadata").click(function() {
                 $('.oc-dialog-content').html("Loading...");
                 loadContent(filename);
               });

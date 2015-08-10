@@ -335,7 +335,7 @@ class ProdsStreamer
         if (($mode{strlen($mode) - 1} == 'b') && (strlen($mode) > 1))
             $mode = substr($mode, 0, strlen($mode) - 1);
          try {
-            if ($mode === 'm') {
+            if ($mode === 'm' || $mode === 'm-') {
               $url = parse_url($path);
               $args = array();
               parse_str($url['query'], $args);
@@ -351,6 +351,14 @@ class ProdsStreamer
                     break;
                   }
                 }
+              }
+              if ($mode === 'm-') {
+                if (!empty($old)) {
+                  $this->file->rmMeta($old);
+                } else {
+                  // meta doesn't exist - already deleted?
+                }
+                return true;
               }
               if (!empty($old)) {
                 $new = new RODSMeta($old->name, $old->value, $old->units, $old->id);
