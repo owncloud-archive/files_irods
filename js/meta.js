@@ -17,9 +17,10 @@ function loadContent(filename) {
                   mode: 'inline',
                   success: function (response, newValue) {
                     if (response.newId && response.oldId) {
+                      console.log("Updating pk from "+response.oldId+" to "+response.newId);
                       $("table#metadata>tbody>tr>td.editable[data-pk='" + response.oldId + "']").attr('data-pk', response.newId);
                       $("table#metadata>tbody>tr>td>button.remove-metadata[data-pk='" + response.oldId + "']").attr('data-pk', response.newId);
-                      $("table#metadata>tbody>tr>td.editable[data-pk='" + response.oldId + "']").editable('option', 'pk', response.newId);
+                      $("table#metadata>tbody>tr>td.editable[data-pk='" + response.newId + "']").editable('option', 'pk', response.newId);
                     }
                   }
               };
