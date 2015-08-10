@@ -10,8 +10,6 @@ function loadContent(filename) {
             {source:filename},
             function(data, status, xhr) {
               $('.oc-dialog-content').html(data.data);
-              $(".oc-dialog").css("width", "80%");
-              $(".oc-dialog").css("left", "13%");
               var options = {
                   type: 'text',
                   url: OC.filePath('files_irods', 'ajax', 'setMeta.php'),
@@ -30,7 +28,11 @@ function loadContent(filename) {
               $('table#metadata>tbody>tr>td>button.remove-metadata').click(function() {
                 remove(filename, $(this).attr('data-pk'));
               });
-              $('.oc-dialog-content').append('<button class="add-metadata btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Add</button>');
+              
+              $('.oc-dialog-buttonrow').append('<button class="add-metadata btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Add</button>');
+              $('.oc-dialog-buttonrow').append('<button class="refresh-metadata btn btn-primary"><i class="glyphicon glyphicon-refresh"></i> Refresh</button>');
+              
+              
               $(".add-metadata").click(function() {
                 var id = Date.now();
                 $("table#metadata>tbody").append("<tr><td class='editable' data-name='name' data-pk='"+id+"'>name</td><td class='editable' data-name='value' data-pk='"+id+"'>value</td><td class='editable' data-name='units' data-pk='"+id+"'>units</td><td><button class='btn btn-danger remove-metadata' data-pk='"+id+"'><i class='glyphicon glyphicon-remove'></i> Remove</button></td></tr>");
@@ -39,7 +41,6 @@ function loadContent(filename) {
                   remove($(this).attr('data-pk'));
                 });
               });
-              $('.oc-dialog-content').append('<button class="refresh-metadata btn btn-primary"><i class="glyphicon glyphicon-refresh"></i> Refresh</button>');
               $(".refresh-metadata").click(function() {
                 $('.oc-dialog-content').html("Loading...");
                 loadContent(filename);
