@@ -64,8 +64,8 @@ class ProdsDir extends ProdsPath
     $authtype='irods';
     if (isset($url['user']))
     {
-      if (strstr($url['user'],".")!==false) {
-        $user_array=@explode(".",$url['user']);
+      if (strstr($url['user'],"_")!==false) {
+        $user_array=@explode("_",$url['user']);
         if (count($user_array)===3) {
           $user=$user_array[0];
           $zone=$user_array[1];
@@ -93,7 +93,9 @@ class ProdsDir extends ProdsPath
       $path_str=$path_str.'#'.$url['fragment'];
 
     if (empty($path_str))
-      $path_str='/';
+      $path_str = '/';
+    if (substr($path_str, -2) === '/.')
+      $path_str = trim($path_str, '.');
 
     return (new ProdsDir($account,$path_str,$verify));
   }

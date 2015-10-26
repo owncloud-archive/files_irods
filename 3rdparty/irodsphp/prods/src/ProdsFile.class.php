@@ -63,8 +63,8 @@ class ProdsFile extends ProdsPath
     $authtype='irods';
     if (isset($url['user']))
     {
-      if (strstr($url['user'],".")!==false) {
-        $user_array=@explode(".",$url['user']);
+      if (strstr($url['user'],"_")!==false) {
+        $user_array=@explode("_",$url['user']);
         if (count($user_array)===3) {
           $user=$user_array[0];
           $zone=$user_array[1];
@@ -149,7 +149,7 @@ class ProdsFile extends ProdsPath
 
         $this->conn = RODSConnManager::getConn($this->account);
         $this->l1desc = $this->conn->openFileDesc($this->path_str, $mode,
-            $this->postion, $rescname, $assum_file_exists, $filetype, $cmode);
+            $this->position, $rescname, $assum_file_exists, $filetype, $cmode);
         $this->openmode = $mode;
         RODSConnManager::releaseConn($this->conn);
     }
@@ -428,7 +428,3 @@ class ProdsFile extends ProdsPath
         return $users;
     }
 }   
-    
-    
-    
-    

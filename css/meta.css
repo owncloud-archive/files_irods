@@ -1,0 +1,30 @@
+div.oc-dialog {
+  width: 40% !important;
+}
+
+#metadata {
+  width: 100%;
+  table-layout: fixed;
+}
+#metadata>thead>tr>th {
+  padding: 0px 15px 5px 0px;
+}
+#metadata>tbody>tr>td {
+  padding: 0px 15px 5px 0px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 25%;
+  cursor: pointer;
+  cursor: hand;
+}
+#metadata .editable-input .form-control {
+  width: 60px;
+}
+#metadata .editable-buttons {
+  margin-top: 4px;
+}
+
+div.oc-dialog-buttonrow>button.btn {
+  float: left;
+  margin-right:10px;
+}

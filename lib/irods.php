@@ -80,13 +80,23 @@ class iRODS extends \OC\Files\Storage\StreamWrapper{
 		}
 
 		// adding auth method
-		$userWithZone = $this->user.'.'.$this->zone;
+		$userWithZone = $this->user.'_'.$this->zone;
 		if ($this->auth_mode !== '') {
-			$userWithZone .= '.'.$this->auth_mode;
+			$userWithZone .= '_'.$this->auth_mode;
 		}
 
 		// url wrapper schema is named rods
 		return 'rods://'.$userWithZone.':'.$this->password.'@'.$this->host.':'.$this->port.$this->root.$path;
+	}
+	
+	public function fopen($path, $mode) {
+		$fh = fopen($this->constructUrl($path), $mode);
+		if ($fh) {
+			// override the default 8k php stream chunk
+			// size for non-file streams.
+			stream_set_chunk_size($fh, 1024*1024*10);
+		}
+		return $fh;
 	}
 
 	public function filetype($path) {

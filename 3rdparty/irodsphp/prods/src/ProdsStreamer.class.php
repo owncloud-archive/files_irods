@@ -31,6 +31,13 @@ class ProdsStreamer
 	 * @access private
 	 */
 	private $file;
+	
+	/**
+         * Metadata of the file/directory
+         *
+         * @access public
+         */
+        public $metadata;
 
 	
 	/**
@@ -193,8 +200,12 @@ class ProdsStreamer
                   $file_from=ProdsDir::fromURI($url_from);
                   $file_to=ProdsDir::fromURI($url_to);
                   $conn = RODSConnManager::getConn($file_from->account);
+                  
+                  if (file_exists($url_to)) {
+                    unlink($url_to);
+                  }
 
-                  if (is_dir($url_from)) {
+                  if (is_file($url_from)) {
                     $conn->rename($file_from->path_str, $file_to->path_str, 0);
                   } else {
                     $conn->rename($file_from->path_str, $file_to->path_str, 1);
@@ -217,6 +228,7 @@ class ProdsStreamer
 	{
 		try {
 		  $this->dir=ProdsDir::fromURI($path,true);
+		  $this->metadata = $this->dir->getMeta();
 		  return true;
 		} catch (Exception $e) {
 		  trigger_error("Got an exception:$e", E_USER_WARNING);
@@ -317,16 +329,65 @@ class ProdsStreamer
      */
     public function stream_open($path, $mode, $options, &$opened_path)
     {
-
         // get rid of tailing 'b', if any.
         if (($mode{strlen($mode) - 1} == 'b') && (strlen($mode) > 1))
             $mode = substr($mode, 0, strlen($mode) - 1);
          try {
+            if ($mode === 'm' || $mode === 'm-') {
+              $url = parse_url($path);
+              $args = array();
+              parse_str($url['query'], $args);
+              unset($url['query']);
+              $path = strstr($path, '?', true);
+              $this->file = ProdsFile::fromURI($path);
+              $old = NULL;
+              if (!empty($args['id'])) {
+                $oldMeta = $this->file->getMeta();
+                foreach ($oldMeta as $meta) {
+                  if ($meta->id === $args['id']) {
+                    $old = $meta;
+                    break;
+                  }
+                }
+              }
+              if ($mode === 'm-') {
+                if (!empty($old)) {
+                  $this->file->rmMeta($old);
+                } else {
+                  // meta doesn't exist - already deleted?
+                }
+                return true;
+              }
+              if (!empty($old)) {
+                $new = new RODSMeta($old->name, $old->value, $old->units, $old->id);
+                if ($args['name'] === 'name') {
+                  $new->name = $args['value'];
+                } else if ($args['name'] === 'value') {
+                  $new->value = $args['value'];
+                } else if ($args['name'] === 'units') {
+                  $new->units = $args['value'];
+                }
+                $this->file->updateMeta($old, $new);
+              } else {
+                $new = new RODSMeta("name", "value", "units");
+                if ($args['name'] === 'name') {
+                  $new->name = $args['value'];
+                } else if ($args['name'] === 'value') {
+                  $new->value = $args['value'];
+                } else if ($args['name'] == 'units') {
+                  $new->units = $args['units'];
+                }
+                $this->file->addMeta($new);
+              }
+              $this->metadata = $this->file->getMeta();
+              return true;
+            }
             $this->file = ProdsFile::fromURI($path);
             $this->file->open($mode);
+            $this->metadata = $this->file->getMeta();
             return true;
         } catch (Exception $e) {
-            trigger_error("Got an exception:$e", E_USER_WARNING);
+            trigger_error("Got an exception:$e while trying to stream_open $path with mode $mode", E_USER_WARNING);
             return false;
         }
     }
